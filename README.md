@@ -1,16 +1,25 @@
 # db_final_project
 
-# neo4j credentials
+# neo4j credentials (graphstory)
 
-# GUI
+GUI
+
 https://hickle-flat-blue-billie.graphstory.me
-# API
+
+API
+
 bolt://hickle-flat-blue-billie.graphstory.me:7687
 
 username: hickle_flat_blue_billie
+
 password: fSfrV3alBtF4jbpcYNZQlh5qjwJ
 
+# SQL server credentials (azure)
 
+API
 
+bilbo-server.database.windows.net
 
-# SQL server credentials
+username: hickle_flat_blue_billie
+
+password: fSfrV3alBtF4jbpcYNZQlh5qjwJ
