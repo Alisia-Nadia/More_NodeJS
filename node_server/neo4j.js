@@ -6,6 +6,7 @@ const session = driver.session();
 const { Parser } = require('json2csv');
 
 //practical code
+
 exports.insertPerson = async function (object) {
     let result = await session.run(`CREATE (n:Person {name: {name}, age: {age}}) RETURN n`, object);
     const singleRecord = result.records[0];

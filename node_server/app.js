@@ -15,9 +15,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-//bcrypt (password hashing)
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 //neo4j
 const neo4j = require("./neo4j.js");
 //sql
@@ -51,20 +48,8 @@ app.post("/register", auth, function (req, res) {
     let password = req.body.password;
     let email = req.body.email;
 
-    bcrypt.hash(password, saltRounds).then(function (hash) {
-        let newUser = {
-            "username": username,
-            "password": hash,
-            "email": email
-        }
+    //*DO MAGIC*
 
-        //*INSERT INTO SQL*
-
-        res.send("success");
-    }).catch(function (err) {
-        console.log(err);
-        res.send("failure");
-    });
 });
 
 app.post("/login", function (req, res) {
