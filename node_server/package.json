@@ -1,0 +1,27 @@
+{
+  "name": "node_server",
+  "version": "1.0.0",
+  "description": "backend and frontend for an e-shop website utilizing sql server and neo4j",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4li100k/db_final_project.git"
+  },
+  "author": "Cehlár, Sarb, Xian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4li100k/db_final_project/issues"
+  },
+  "homepage": "https://github.com/4li100k/db_final_project#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.0",
+    "express-session": "^1.16.1",
+    "json2csv": "^4.5.1",
+    "neo4j-driver": "^1.7.4"
+  }
+}
