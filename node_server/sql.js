@@ -27,7 +27,7 @@ exports.registerUser = function (firstName, lastName, email, telephone, street, 
 
         sql.connect(config, function (err) {
             if (err) {
-                reject(err);
+                return reject(err);
             };
             let request = new sql.Request();
             request.input('fName', sql.VarChar, firstName);
@@ -42,37 +42,34 @@ exports.registerUser = function (firstName, lastName, email, telephone, street, 
             // request.multiple = true; // enables multiple statements in one query but here we only do a single insert
             request.query(`INSERT INTO Customers (fName, lName, email, telephone, street, city, postCode, country, pHash) VALUES (@fName, @lName, @email, @telephone, @street, @city, @postCode, @country, @pHash)`, function (err, recordset) {
                 if (err) {
-                    reject(err);
+                    return reject(err);
                 };
-                resolve(recordset);
+                return resolve(recordset);
             });
         });
     });
 };
 
 exports.loginUser = function (email, password) {
-    sql.connect(config, function (err) {
-        if (err) {
-            console.log(err);
-            return false;
-        };
-        let request = new sql.Request();
-        request.query(`SELECT TOP 1 * FROM Customers WHERE email = '${email}'`, function (err, recordset) {
+    return new Promise(function (resolve, reject) {
+        sql.connect(config, function (err) {
             if (err) {
-                console.log(err);
-                return false;
+                return reject(err);
             };
-            if (recordset.recordset.length == 0) {
-                console.log("no matching email");
-                return false;
-            };
-            if (bcrypt.compareSync(password, recordset.recordset[0].pHash)) {
-                console.log("login successful");
-                return true;
-            } else {
-                console.log("passwords do not match");
-                return false;
-            }
+            let request = new sql.Request();
+            request.query(`SELECT TOP 1 * FROM Customers WHERE email = '${email}'`, function (err, recordset) {
+                if (err) {
+                    return reject(err);
+                };
+                if (recordset.recordset.length == 0) {
+                    return reject("user does not exist");
+                };
+                if (bcrypt.compareSync(password, recordset.recordset[0].pHash)) {
+                    return resolve("login successful");
+                } else {
+                    return reject("passwords do not match");
+                }
+            });
         });
     });
 };

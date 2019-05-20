@@ -45,24 +45,31 @@ app.use(function (err, req, res, next) {
 //api methods
 app.post("/register", function (req, res) {
     let response = {};
-
     let rb = req.body;
-    sql.registerUser(rb.fName, rb.lName, rb.email, rb.telephone, rb.street, rb.city, rb.postCode, rb.country, rb.password).then(function(recordset){
+    sql.registerUser(rb.fName, rb.lName, rb.email, rb.telephone, rb.street, rb.city, rb.postCode, rb.country, rb.password
+    ).then(function (recordset) {
         console.log(recordset)
-    }).catch(function(err){
+        response.msg = "success";
+    }).catch(function (err) {
         console.log(err);
         response.err = err;
-    }).then(function(){
+    }).then(function () {
         res.json(response);
     });
 });
 
 app.post("/login", function (req, res) {
-    let username = req.body.username;
-    let password = req.body.password;
-
-    //*DO MAGIC*
-
+    let response = {};
+    sql.loginUser(req.body.email, req.body.password
+    ).then(function (msg) {
+        console.log(msg)
+        response.msg = "success";
+    }).catch(function (err) {
+        console.log(err);
+        response.err = err;
+    }).then(function () {
+        res.json(response);
+    });
 });
 
 //navigation
