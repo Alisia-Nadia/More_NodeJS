@@ -12,50 +12,51 @@
 
 <body>
 
-    <form>
+    <form id="registerForm">
         <div class="form-group">
-            <label for="inputUsername">First name</label>
-            <input type="text" class="form-control" id="fName" placeholder="Enter first name" required>
+            <label for="fName">First name</label>
+            <input type="text" class="form-control" id="fName" placeholder="Enter first name" value="" required>
         </div>
         <div class="form-group">
-            <label for="inputName">Last name</label>
-            <input type="text" class="form-control" id="lName" placeholder="Enter last name" required>
+            <label for="lName">Last name</label>
+            <input type="text" class="form-control" id="lName" placeholder="Enter last name" value="Smith" required>
         </div>
         <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                placeholder="Enter email" required>
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
+                value="" required>
             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
         <div class="form-group">
-                <label for="inputTelephone">Telephone</label>
-                <input type="number" class="form-control" id="telephone" placeholder="Enter telephone" required>
+            <label for="telephone">Telephone</label>
+            <input type="number" class="form-control" id="telephone" placeholder="Enter telephone" value="" required>
         </div>
         <div class="form-group">
-            <label for="inputStreet">Street</label>
-            <input type="text" class="form-control" id="street" placeholder="Enter street" required>
+            <label for="street">Street</label>
+            <input type="text" class="form-control" id="street" placeholder="Enter street" value="" required>
         </div>
         <div class="form-group">
-            <label for="inputCity">City</label>
-            <input type="text" class="form-control" id="city" placeholder="Enter city" required>
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" placeholder="Enter city" value="Copenhagen" required>
         </div>
         <div class="form-group">
-            <label for="inputPostCode">Post code</label>
-            <input type="text" class="form-control" id="postCode" placeholder="Enter post code" required>
+            <label for="postCode">Post code</label>
+            <input type="text" class="form-control" id="postCode" placeholder="Enter post code" value="2400" required>
         </div>
         <div class="form-group">
-            <label for="inputCountry">Country</label>
-            <input type="text" class="form-control" id="country" placeholder="Enter country" required>
+            <label for="country">Country</label>
+            <input type="text" class="form-control" id="country" placeholder="Enter country" value="Denmark" required>
         </div>
         <div class="form-group">
-            <label for="inputPassword">Enter Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter Password" required>
+            <label for="password">Enter Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter Password" value="" required>
         </div>
         <div class="form-group">
-            <label for="inputPasswordRepeat">Repeat Password</label>
-            <input type="password" class="form-control" id="inputPasswordRepeat" placeholder="Repeat Password" required>
+            <label for="passwordRepeat">Repeat Password</label>
+            <input type="password" class="form-control" id="passwordRepeat" placeholder="Repeat Password" value=""
+                required>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Register</button>
     </form>
 
 
@@ -68,6 +69,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="../js/registerPage.js"></script>
 </body>
 
 </html>

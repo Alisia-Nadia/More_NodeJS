@@ -15,9 +15,18 @@ const saltRounds = 10;
 
 //practical code
 
-let promise = new Promise(function (resolve, reject) {
-
-});
+exports.connect = function () {
+    return new Promise(function (resolve, reject) {
+        sql.connect(config, function (err) {
+            if (err) {
+                sql.close();
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 
 exports.registerUser = function (firstName, lastName, email, telephone, street, city, postCode, country, password) {
     return new Promise(function (resolve, reject) {
@@ -25,51 +34,43 @@ exports.registerUser = function (firstName, lastName, email, telephone, street, 
 
         //checks for existing username or email get done by the database
 
-        sql.connect(config, function (err) {
+        let request = new sql.Request();
+        request.input('fName', sql.VarChar, firstName);
+        request.input('lName', sql.VarChar, lastName);
+        request.input('email', sql.VarChar, email);
+        request.input('telephone', sql.Int, telephone);
+        request.input('street', sql.VarChar, street);
+        request.input('city', sql.VarChar, city);
+        request.input('postCode', sql.VarChar, postCode);
+        request.input('country', sql.VarChar, country);
+        request.input('pHash', sql.VarChar, pHash);
+        // request.multiple = true; // enables multiple statements in one query but here we only do a single insert
+        request.query(`INSERT INTO Customers (fName, lName, email, telephone, street, city, postCode, country, pHash) VALUES (@fName, @lName, @email, @telephone, @street, @city, @postCode, @country, @pHash)`, function (err, recordset) {
             if (err) {
-                return reject(err);
-            };
-            let request = new sql.Request();
-            request.input('fName', sql.VarChar, firstName);
-            request.input('lName', sql.VarChar, lastName);
-            request.input('email', sql.VarChar, email);
-            request.input('telephone', sql.Int, telephone);
-            request.input('street', sql.VarChar, street);
-            request.input('city', sql.VarChar, city);
-            request.input('postCode', sql.VarChar, postCode);
-            request.input('country', sql.VarChar, country);
-            request.input('pHash', sql.VarChar, pHash);
-            // request.multiple = true; // enables multiple statements in one query but here we only do a single insert
-            request.query(`INSERT INTO Customers (fName, lName, email, telephone, street, city, postCode, country, pHash) VALUES (@fName, @lName, @email, @telephone, @street, @city, @postCode, @country, @pHash)`, function (err, recordset) {
-                if (err) {
-                    return reject(err);
-                };
-                return resolve(recordset);
-            });
+                reject(err);
+            } else {
+                resolve(recordset);
+            }
         });
     });
 };
 
 exports.loginUser = function (email, password) {
     return new Promise(function (resolve, reject) {
-        sql.connect(config, function (err) {
+        let request = new sql.Request();
+        request.query(`SELECT TOP 1 * FROM Customers WHERE email = '${email}'`, function (err, recordset) {
             if (err) {
-                return reject(err);
-            };
-            let request = new sql.Request();
-            request.query(`SELECT TOP 1 * FROM Customers WHERE email = '${email}'`, function (err, recordset) {
-                if (err) {
-                    return reject(err);
-                };
+                reject(err);
+            } else
                 if (recordset.recordset.length == 0) {
-                    return reject("user does not exist");
-                };
-                if (bcrypt.compareSync(password, recordset.recordset[0].pHash)) {
-                    return resolve("login successful");
-                } else {
-                    return reject("passwords do not match");
-                }
-            });
+                    reject("user does not exist");
+                } else
+                    if (bcrypt.compareSync(password, recordset.recordset[0].pHash)) {
+                        resolve("login successful");
+                    } else {
+                        reject("passwords do not match");
+                    }
+            sql.close();
         });
     });
 };
