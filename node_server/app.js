@@ -43,13 +43,18 @@ app.use(function (err, req, res, next) {
 });
 
 //api methods
-app.post("/register", auth, function (req, res) {
-    let username = req.body.username;
-    let password = req.body.password;
-    let email = req.body.email;
+app.post("/register", function (req, res) {
+    let response = {};
 
-    //*DO MAGIC*
-
+    let rb = req.body;
+    sql.registerUser(rb.fName, rb.lName, rb.email, rb.telephone, rb.street, rb.city, rb.postCode, rb.country, rb.password).then(function(recordset){
+        console.log(recordset)
+    }).catch(function(err){
+        console.log(err);
+        response.err = err;
+    }).then(function(){
+        res.json(response);
+    });
 });
 
 app.post("/login", function (req, res) {
@@ -69,6 +74,9 @@ app.get("/loginPage", function (req, res) {
 });
 app.get("/registerPage", function (req, res) {
     res.sendFile(__dirname + "/public/html/registerPage.html");
+});
+app.get("/shoppingCartPage", auth, function (req, res) {
+    res.sendFile(__dirname + "/public/html/shoppingCartPage.html");
 });
 
 

@@ -15,75 +15,64 @@ const saltRounds = 10;
 
 //practical code
 
-exports.registerUser = function (username, name, address, email, password) {
-    let hash = bcrypt.hashSync(password, saltRounds);
-    
-    //checks for existing username or email get done by the database
+let promise = new Promise(function (resolve, reject) {
 
-    sql.connect(config, function(err){
-        if (err) {
-            console.log(err);
-            return false;
-        };
-        let request = new sql.Request();
-        request.input('username', sql.VarChar, username);
-        request.input('name', sql.VarChar, name);
-        request.input('address', sql.VarChar, address);
-        request.input('email', sql.VarChar, email);
-        request.input('hash', sql.VarChar, hash);
-        // request.multiple = true; // enables multiple statements in one query but here we only do a single insert
-        request.query(`INSERT INTO Users (username, name, address, email, hash) VALUES (@username, @name, @address, @email, @hash)`, function(err, recordset){
-            console.log(recordset);
-            return true;
+});
+
+exports.registerUser = function (firstName, lastName, email, telephone, street, city, postCode, country, password) {
+    return new Promise(function (resolve, reject) {
+        let pHash = bcrypt.hashSync(password, saltRounds);
+
+        //checks for existing username or email get done by the database
+
+        sql.connect(config, function (err) {
+            if (err) {
+                reject(err);
+            };
+            let request = new sql.Request();
+            request.input('fName', sql.VarChar, firstName);
+            request.input('lName', sql.VarChar, lastName);
+            request.input('email', sql.VarChar, email);
+            request.input('telephone', sql.Int, telephone);
+            request.input('street', sql.VarChar, street);
+            request.input('city', sql.VarChar, city);
+            request.input('postCode', sql.VarChar, postCode);
+            request.input('country', sql.VarChar, country);
+            request.input('pHash', sql.VarChar, pHash);
+            // request.multiple = true; // enables multiple statements in one query but here we only do a single insert
+            request.query(`INSERT INTO Customers (fName, lName, email, telephone, street, city, postCode, country, pHash) VALUES (@fName, @lName, @email, @telephone, @street, @city, @postCode, @country, @pHash)`, function (err, recordset) {
+                if (err) {
+                    reject(err);
+                };
+                resolve(recordset);
+            });
         });
     });
-
 };
 
-exports.loginUser = function (username, password) {
+exports.loginUser = function (email, password) {
     sql.connect(config, function (err) {
         if (err) {
             console.log(err);
             return false;
         };
         let request = new sql.Request();
-        request.query(`SELECT TOP 1 * FROM Persons WHERE name = '${username}'`, function (err, recordset) {
+        request.query(`SELECT TOP 1 * FROM Customers WHERE email = '${email}'`, function (err, recordset) {
             if (err) {
                 console.log(err);
                 return false;
             };
             if (recordset.recordset.length == 0) {
-                console.log("no matching username");
+                console.log("no matching email");
                 return false;
             };
-            if(bcrypt.compareSync(password, recordset.recordset[0].hash)){
-                console.log("passwords match");
+            if (bcrypt.compareSync(password, recordset.recordset[0].pHash)) {
+                console.log("login successful");
                 return true;
-            }else{
+            } else {
                 console.log("passwords do not match");
                 return false;
             }
-        });
-    });
-};
-
-//test, delete later
-exports.testSelect = function () {
-    sql.connect(config, function (err) {
-
-        if (err) return console.log(err);
-
-        // create Request object
-        var request = new sql.Request();
-
-        // query to the database and get the records
-        request.query('select * from Persons', function (err, recordset) {
-
-            if (err) console.log(err)
-
-            // send records as a response
-            console.log(recordset.recordset);
-
         });
     });
 };

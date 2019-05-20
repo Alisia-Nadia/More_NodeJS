@@ -19,4 +19,8 @@
 
 const sql = require("./sql.js");
 
-sql.loginUser("Alicse", "pw");
+//sql.loginUser("Alicse", "pw");
+
+//sql.registerUser("Alice", "Liss", "alice.liss@mail.com", 44556622, "Lygten 1, 25 tv", "Copenhagen", "2400", "Denmark", "alice");
+sql.loginUser("alice.liss@mail.com", "alice");
+
