@@ -91,6 +91,12 @@ app.post("/emptyShoppingCart", auth, function (req, res){
 app.get("/getShoppingCart", auth, function (req, res){
     res.json({"shoppingCart": req.session.shoppingCart});
 });
+app.get("/getProducts", function(req, res){
+    sql.getProducts().then((products)=>{
+        console.log(products);
+        res.send(products);
+    })
+});
 
 app.get("/logout", function (req, res) {
     req.session.destroy();
