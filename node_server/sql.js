@@ -62,7 +62,7 @@ exports.loginUser = function (email, password) { // works
     });
 };
 
-exports.getProducts = function () { // needs testing after going from 2 joined tables to a view
+exports.getProducts = function () { // works, missing description column
     return new Promise(function (resolve, reject) {
         let request = new sql.Request();
         request.query(`SELECT * FROM vw_products_display_info;`, function (err, recordset) {
@@ -85,6 +85,7 @@ exports.getProductsForShoppingCart = function (shoppingCart) { // needs testing
                 generatedQuery += `\nUNION ALL\n`;
             }
         }
+        console.log("after loop: " + generatedQuery);
         request.query(generatedQuery, function (err, recordset) {
             if (err) return reject(err);
             return resolve(recordset.recordset);
