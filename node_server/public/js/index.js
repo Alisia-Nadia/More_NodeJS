@@ -1,6 +1,7 @@
-function myFunction() {
-
-    console.log($(this).attr("psize"));
+function myFunction(id) {
+   
+    var element = document.getElementById(id);
+    console.log($(element).attr("psize"));
 
 }
 
@@ -19,7 +20,7 @@ $.ajax({
             + 'Brand:' + e.brand + '</br>'
             + 'Gender:' + e.gender + '</br>'
             + '<img src = "../pictures/husky1.jpg">' + '</br>'
-            + '<button pnumber =' + e.pNo + ' psize = ' + e.pSize + ' onclick="myFunction()">Add to cart</button>'
+            + '<button id = ' +e.pNo[0]+e.pSize + ' pnumber =' + e.pNo[0] + ' psize = ' + e.pSize + ' onclick="myFunction(id)">Add to cart</button>'
             + '</div>')
 
 
