@@ -1,26 +1,7 @@
-// const { Parser } = require('json2csv');
-
-// const fields = ['name', 'age'];
-// let object = {};
-// object.name = "Alice";
-// object.age = 19;
-// let object2 = {};
-// object2.name = "Bob";
-// object2.age = 34;
-
-// let array = [];
-// array.push(object);
-// array.push(object2);
-
-// const json2csvParser = new Parser({fields});
-// const csv = json2csvParser.parse(array);
-
-// console.log(csv);
-
 const sql = require("./sql.js");
 
 //sql.loginUser("Alicse", "pw");
-sql.connect().then(() => {
+/*sql.connect().then(() => {
     sql.registerUser("Alice", "Liss", "alice.liss@mail.com", 77663322, "Jagtvej 14, 4 tv", "copenhagen", "2200", "Denmark", "alice");
     sql.registerUser("Bob", "Maher", "bob.maher@mail.com", 11556688, "Sesame 12, 2 th", "Copenhagen", "2400", "Denmark", "bob");
     sql.registerUser("Cotton", "Maher", "cotton.maher@mail.com", 44998855, "Lygten 2, 9 tv", "Copenhagen", "2400", "Denmark", "cotton");
@@ -31,6 +12,19 @@ sql.connect().then(() => {
     sql.registerUser("Ann", "Putnam", "ann.putnam@mail.com", 44117755, "Tuborgvej, st th", "Copenhagen", "2400", "Denmark", "ann");
     sql.registerUser("John", "Doe", "john.doe@mail.com", 77665533, "Tagensvej 4, 3 tv", "Copenhagen", "2400", "Denmark", "john");
     sql.registerUser("Deodat", "Lawson", "deodat.lawson@mail.com", 44663322, "Amagerbrogade 48", "Copenhagen", "2300", "Denmark", "deodat");
+});*/
+
+sql.connect().then(()=>{
+    let shoppingCart = [];
+    shoppingCart.push({"pNo": 40, "pSize": "S"});
+    shoppingCart.push({"pNo": 40, "pSize": "S"});
+    shoppingCart.push({"pNo": 40, "pSize": "M"});
+    shoppingCart.push({"pNo": 40, "pSize": "M"});
+    shoppingCart.push({"pNo": 40, "pSize": "L"});
+    shoppingCart.push({"pNo": 40, "pSize": "L"});
+    sql.createOrder(29, "Bank", shoppingCart).then((recordset)=>{
+        console.log(recordset);
+    }).catch((err)=>{
+        console.log(err);
+    });
 });
-
-
