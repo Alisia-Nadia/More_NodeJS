@@ -15,7 +15,7 @@ const saltRounds = 10;
 
 //practical code
 
-exports.connect = function () {
+exports.connect = function () { // works
     return new Promise(function (resolve, reject) {
         sql.connect(config, function (err) {
             if (err) {
@@ -28,7 +28,7 @@ exports.connect = function () {
     });
 }
 
-exports.registerUser = function (firstName, lastName, email, telephone, street, city, postCode, country, password) {
+exports.registerUser = function (firstName, lastName, email, telephone, street, city, postCode, country, password) { // works
     return new Promise(function (resolve, reject) {
         let pHash = bcrypt.hashSync(password, saltRounds);
         //checks for existing username or email get done by the database
@@ -49,7 +49,7 @@ exports.registerUser = function (firstName, lastName, email, telephone, street, 
     });
 };
 
-exports.loginUser = function (email, password) {
+exports.loginUser = function (email, password) { // works
     return new Promise(function (resolve, reject) {
         let request = new sql.Request();
         request.input('email', sql.VarChar, email);
@@ -62,17 +62,37 @@ exports.loginUser = function (email, password) {
     });
 };
 
-exports.getProducts = function () {
+exports.getProducts = function () { // needs testing after going from 2 joined tables to a view
     return new Promise(function (resolve, reject) {
         let request = new sql.Request();
-        request.query(`SELECT * FROM Products JOIN Product_details ON Products.pNo = Product_details.pNo;`, function (err, recordset) {
+        request.query(`SELECT * FROM vw_products_display_info;`, function (err, recordset) {
             if (err) return reject(err);
             return resolve(recordset.recordset);
         });
     });
 }
 
-exports.createOrder = function (cid, paymentOption, shoppingCart) {
+exports.getProductsForShoppingCart = function (shoppingCart) { // needs testing
+    return new Promise(function (resolve, reject) {
+        if (shoppingCart.length == 0) return resolve([]); //empty shopping cart returns an empty array
+        let generatedQuery = "";
+        let request = new sql.Request();
+        for (let i = 0; i < shoppingCart.length; i++) {
+            request.input('pNo' + i, sql.Int, shoppingCart[i].pNo); // pNo4 = shoppingCart[4].pNo
+            request.input('pSize' + i, sql.VarChar, shoppingCart[i].pSize); // pSize4 = shoppingCart[4].pSize
+            generatedQuery += `SELECT * FROM vw_products_display_info WHERE pNo = @pNo${i} AND pSize = @pSize${i}`;
+            if (i < shoppingCart.length - 1) {
+                generatedQuery += `\nUNION ALL\n`;
+            }
+        }
+        request.query(generatedQuery, function (err, recordset) {
+            if (err) return reject(err);
+            return resolve(recordset.recordset);
+        });
+    });
+}
+
+exports.createOrder = function (cid, paymentOption, shoppingCart) { // works
     return new Promise(function (resolve, reject) {
         if (!["Bank", "Card", "MobilePay"].includes(paymentOption)) {
             return reject("invalid payment option");
@@ -82,7 +102,6 @@ exports.createOrder = function (cid, paymentOption, shoppingCart) {
         }
         let request = new sql.Request();
         request.input('cID', sql.Int, cid);
-        //request.input('date', sql.Date, "getdate()");
         request.input('paymentOption', sql.VarChar, paymentOption);
         request.input('status', sql.VarChar, "BeingProcessed"); // default status
         request.multiple = true;
@@ -113,7 +132,7 @@ exports.createOrder = function (cid, paymentOption, shoppingCart) {
     });
 }
 
-function generateInsertsForShoppingCart(shoppingCart) {
+function generateInsertsForShoppingCart(shoppingCart) { // works
     return new Promise(function (resolve, reject) {
         let generatedInserts = "";
         let loops = shoppingCart.length;
