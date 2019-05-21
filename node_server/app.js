@@ -21,25 +21,15 @@ const neo4j = require("./neo4j.js");
 const sql = require("./sql.js");
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//app (this code works)
-// let person = {};
-// person.name = "Alice";
-// person.age = 20;
-// neo4j.insertPerson(person);
-
 //login verifier
 const auth = function (req, res, next) { // if you are logged in, proceed, otherwise send json error
-    if (req.session && req.session.admin)
-        return next();
-    else
-        return res.sendFile(__dirname + "/public/html/loginPage.html");
+    if (req.session && req.session.admin) return next();
+    else return res.sendFile(__dirname + "/public/html/loginPage.html");
 };
 
 //this prints any exception in the browser
 app.use(function (err, req, res, next) {
-    return res.status(500).send({
-        error: err
-    });
+    return res.status(500).send({ "error": err });
 });
 
 //api methods
@@ -93,10 +83,26 @@ app.get("/getShoppingCart", auth, function (req, res) {
     res.json({ "shoppingCart": req.session.shoppingCart });
 });
 app.get("/getProducts", function (req, res) {
+    let response = {};
     sql.getProducts().then((products) => {
         console.log(products);
-        res.send(products);
-    })
+        response.products = products;
+    }).catch(err=>{
+        response.err = err;
+    }).then(()=>{
+        res.json(response);
+    });
+});
+app.get("/getProductsForShoppingCart", function (req, res) {
+    let response = {};
+    sql.getProductsForShoppingCart(req.body.shoppingCart).then((products) => {
+        console.log(products);
+        response.products = products;
+    }).catch(err=>{
+        response.err = err;
+    }).then(()=>{
+        res.json(response);
+    });
 });
 app.get("/logout", function (req, res) {
     req.session.destroy();
