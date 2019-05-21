@@ -9,7 +9,7 @@ $.ajax({
     url: "getProducts",
 }).done(function (response) {
 
-    response.forEach(e => {
+    response.products.forEach(e => {
         $('#mainFlex').append('<div style="margin: 10px">'
             + e.pName + '</br>'
             + 'General description:' + e.generalDescription + '</br>'
