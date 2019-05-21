@@ -67,7 +67,8 @@ app.post("/login", function (req, res) {
     let response = {};
     sql.loginUser(req.body.email, req.body.password
     ).then(function (msg) {
-        req.session.username = req.body.email;
+        req.session.email = req.body.email;
+        req.session.id = msg.cID;
         req.session.admin = true;
         req.session.shoppingCart = [];
         response.msg = "success";
@@ -80,27 +81,29 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.post("/addToShoppingCart", auth, function (req, res){
+app.post("/addToShoppingCart", auth, function (req, res) {
     req.session.shoppingCart.push(req.body.item);
-    res.json({"msg": "success"});
+    res.json({ "msg": "success" });
 });
-app.post("/emptyShoppingCart", auth, function (req, res){
+app.post("/emptyShoppingCart", auth, function (req, res) {
     req.session.shoppingCart = [];
-    res.json({"msg": "success"});
+    res.json({ "msg": "success" });
 });
-app.get("/getShoppingCart", auth, function (req, res){
-    res.json({"shoppingCart": req.session.shoppingCart});
+app.get("/getShoppingCart", auth, function (req, res) {
+    res.json({ "shoppingCart": req.session.shoppingCart });
 });
-app.get("/getProducts", function(req, res){
-    sql.getProducts().then((products)=>{
+app.get("/getProducts", function (req, res) {
+    sql.getProducts().then((products) => {
         console.log(products);
         res.send(products);
     })
 });
-
 app.get("/logout", function (req, res) {
     req.session.destroy();
     res.redirect("back");
+});
+app.get("/getEmail", auth, function (req, res) {
+    res.send(req.session.email);
 });
 
 //navigation
@@ -117,23 +120,20 @@ app.get("/shoppingCartPage", auth, function (req, res) {
     res.sendFile(__dirname + "/public/html/shoppingCartPage.html");
 });
 
-
 //start the server
 const server = app.listen(process.env.PORT || 3000, function (err) {
     if (err) {
         console.log("Server couldn't start.");
         server.close(() => {
-            process.exit()
+            process.exit();
         });
     }
-    sql.connect().then(()=>{
+    sql.connect().then(() => {
         console.log("Server started on port", server.address().port);
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
         server.close(() => {
-            process.exit()
+            process.exit();
         });
     });
-    
-
 });
