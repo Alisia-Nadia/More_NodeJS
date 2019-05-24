@@ -8,10 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+  
 </head>
 
 <body>
-
+    
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand">BestShop</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,20 +28,24 @@
                     <a class="nav-item nav-link" href="logout">Log out</a>
                   </div>
                 </div>
-              </nav>
+            </nav>
 
-    <form id="loginForm">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Log in</button>
-    </form>
-
+            <div id = 'amount'>
+                <h3>Total amount of payment:</h3>
+            </div>
+    
+            <div>
+                <h3>Chose method of payment:</h3>
+                <form id='paymenForm'>
+                    
+                    <input type="radio" id="bank" name="payment" value="Bank">Bank</br>
+                    <input type="radio" id="card" name="payment" value="Card">Card</br>
+                    <input type="radio" id="mobile" name="payment" value="MobilePay">MobilePay
+                    
+                </form>
+            </div> 
+                  
+            <button id='placeOrder'>Place order!</button>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -51,7 +57,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="../js/loginPage.js"></script>
+    <script src="../js/checkOutPage.js"></script>
 </body>
 
 </html>

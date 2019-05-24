@@ -1,4 +1,10 @@
 $(document).ready(function () {
+
+    $("#checkOut").on("click", function () {
+        window.location.assign("checkOutPage");
+
+    });
+
     $("#removeShoppingCardButton").on("click", function () {
         if (confirm("confirm to empty your shoppign cart"))
             $.ajax({
