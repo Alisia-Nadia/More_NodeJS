@@ -62,14 +62,15 @@ app.post("/register", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
-    let response = {};
+    let response = {}
     sql.loginUser(req.body.email, req.body.password).then(function (msg) {
         req.session.email = req.body.email;
-        req.session.id = msg.cID;
+        req.session.cID = msg.cID;
         req.session.admin = true;
         req.session.shoppingCart = [];
         response.msg = "success";
         // console.log(msg);
+        console.log(msg.cID,req.session.cID)
     }).catch(function (err) {
         console.log(err);
         response.err = err;
@@ -122,13 +123,13 @@ app.get("/getProducts", function (req, res) {
 });
 app.post("/getProductsForShoppingCart", function (req, res) {
     let response = {};
-    console.log("getting products for shopping cart");
+   // console.log("getting products for shopping cart");
     let cart = req.body.shoppingCart || [];
-    console.log("cart from request");
-    console.log(cart);
+    // console.log("cart from request");
+    // console.log(cart);
     sql.getProductsForShoppingCart(cart).then((products) => {
-        console.log("found products");
-        console.log(products);
+        // console.log("found products");
+        // console.log(products);
         response.products = products;
     }).catch(err => {
         console.log(err);
@@ -145,6 +146,23 @@ app.get("/getEmail", auth, function (req, res) {
     res.send(req.session.email);
 });
 
+app.post("/createOrder",authJson,function (req, res) {
+    let response = {};
+    let rb = req.body;
+    //console.log(rb.paymentOption);
+    // console.log(req.session.shoppingCart)
+
+    sql.createOrder(req.session.cID,rb.paymentOption,req.session.shoppingCart).then(function(recordOrder) {
+        console.log('dsihids'+recordOrder)
+        response.msg = "success";
+    }).catch(err => {
+        response.err = err;
+        console.log(err)
+    }).then(() => {
+        res.json(response);
+    });
+});
+
 //navigation
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/public/html/index.html");
@@ -157,6 +175,9 @@ app.get("/registerPage", function (req, res) {
 });
 app.get("/shoppingCartPage", auth, function (req, res) {
     res.sendFile(__dirname + "/public/html/shoppingCartPage.html");
+});
+app.get("/checkOutPage", auth, function (req, res) {
+    res.sendFile(__dirname + "/public/html/checkOutPage.html");
 });
 
 //start the server
