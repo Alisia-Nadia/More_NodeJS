@@ -12,7 +12,7 @@ app.use(expressSession({
 //body-parser
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(bodyParser.json());
 //neo4j
@@ -27,9 +27,18 @@ const auth = function (req, res, next) { // if you are logged in, proceed, other
     else return res.sendFile(__dirname + "/public/html/loginPage.html");
 };
 
+const authJson = function (req, res, next) { // if you are logged in, proceed, otherwise send json error
+    if (req.session && req.session.admin) return next();
+    else return res.json({
+        "err": "you must log in"
+    });
+};
+
 //this prints any exception in the browser
 app.use(function (err, req, res, next) {
-    return res.status(500).send({ "error": err });
+    return res.status(500).send({
+        "error": err
+    });
 });
 
 //api methods
@@ -41,8 +50,7 @@ app.post("/register", function (req, res) {
         response.err = "passwords do not match";
         return res.json(response);
     }
-    sql.registerUser(rb.fName, rb.lName, rb.email, rb.telephone, rb.street, rb.city, rb.postCode, rb.country, rb.password
-    ).then(function (recordset) {
+    sql.registerUser(rb.fName, rb.lName, rb.email, rb.telephone, rb.street, rb.city, rb.postCode, rb.country, rb.password).then(function (recordset) {
         console.log(recordset)
         response.msg = "success";
     }).catch(function (err) {
@@ -55,14 +63,13 @@ app.post("/register", function (req, res) {
 
 app.post("/login", function (req, res) {
     let response = {};
-    sql.loginUser(req.body.email, req.body.password
-    ).then(function (msg) {
+    sql.loginUser(req.body.email, req.body.password).then(function (msg) {
         req.session.email = req.body.email;
         req.session.id = msg.cID;
         req.session.admin = true;
         req.session.shoppingCart = [];
         response.msg = "success";
-        console.log(msg);
+        // console.log(msg);
     }).catch(function (err) {
         console.log(err);
         response.err = err;
@@ -71,36 +78,62 @@ app.post("/login", function (req, res) {
     });
 });
 
-app.post("/addToShoppingCart", auth, function (req, res) {
-    req.session.shoppingCart.push(req.body.item);
-    res.json({ "msg": "success" });
+app.post("/addToShoppingCart", authJson, function (req, res) {
+    let response = {};
+    req.session.shoppingCart.push(req.body);
+    response.msg = "success";
+    response.alert = `item successfully added to the shopping cat (${req.session.shoppingCart.length} items)`
+    res.json(response);
 });
-app.post("/emptyShoppingCart", auth, function (req, res) {
+app.post("/removeFromShoppingCart", authJson, function (req, res) {
+    let response = {};
+    for (let i = 0; i < req.session.shoppingCart.length; i++) {
+        if (req.session.shoppingCart[i].pSize === req.body.pSize && req.session.shoppingCart[i].pNo === req.body.pNo) {
+            req.session.shoppingCart.splice(i, 1);
+            break;
+        }
+    }
+    response.msg = "success";
+    response.alert = `item successfully removed from the shopping cat (${req.session.shoppingCart.length} items)`
+    res.json(response);
+});
+app.post("/emptyShoppingCart", authJson, function (req, res) {
+    let response = {};
     req.session.shoppingCart = [];
-    res.json({ "msg": "success" });
+    response.msg = "success";
+    response.alert = "your shopping cart is now empty";
+    res.json(response);
 });
-app.get("/getShoppingCart", auth, function (req, res) {
-    res.json({ "shoppingCart": req.session.shoppingCart });
+app.get("/getShoppingCart", authJson, function (req, res) {
+    res.json({
+        "shoppingCart": req.session.shoppingCart
+    });
 });
 app.get("/getProducts", function (req, res) {
     let response = {};
     sql.getProducts().then((products) => {
-        console.log(products);
+        // console.log(products[0]);
         response.products = products;
-    }).catch(err=>{
+    }).catch(err => {
         response.err = err;
-    }).then(()=>{
+    }).then(() => {
         res.json(response);
     });
 });
-app.get("/getProductsForShoppingCart", function (req, res) {
+app.post("/getProductsForShoppingCart", function (req, res) {
     let response = {};
-    sql.getProductsForShoppingCart(req.body.shoppingCart).then((products) => {
+    console.log("getting products for shopping cart");
+    let cart = req.body.shoppingCart || [];
+    console.log("cart from request");
+    console.log(cart);
+    sql.getProductsForShoppingCart(cart).then((products) => {
+        console.log("found products");
         console.log(products);
         response.products = products;
-    }).catch(err=>{
+    }).catch(err => {
+        console.log(err);
         response.err = err;
-    }).then(()=>{
+    }).then(() => {
         res.json(response);
     });
 });
