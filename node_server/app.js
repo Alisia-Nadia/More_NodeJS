@@ -63,14 +63,14 @@ app.post("/register", function (req, res) {
 
 app.post("/login", function (req, res) {
     let response = {}
-    sql.loginUser(req.body.email, req.body.password).then(function (msg) {
-        req.session.email = req.body.email;
-        req.session.cID = msg.cID;
+    sql.loginUser(req.body.email, req.body.password).then(function (customer) {
+        req.session.email = customer.email;
+        req.session.cID = customer.cID;
         req.session.admin = true;
         req.session.shoppingCart = [];
         response.msg = "success";
-        // console.log(msg);
-        console.log(msg.cID,req.session.cID)
+        //insert into neo4j
+        dbMagic(customer);
     }).catch(function (err) {
         console.log(err);
         response.err = err;
@@ -123,7 +123,7 @@ app.get("/getProducts", function (req, res) {
 });
 app.post("/getProductsForShoppingCart", function (req, res) {
     let response = {};
-   // console.log("getting products for shopping cart");
+    // console.log("getting products for shopping cart");
     let cart = req.body.shoppingCart || [];
     // console.log("cart from request");
     // console.log(cart);
@@ -146,15 +146,19 @@ app.get("/getEmail", auth, function (req, res) {
     res.send(req.session.email);
 });
 
-app.post("/createOrder",authJson,function (req, res) {
+app.post("/createOrder", authJson, function (req, res) {
     let response = {};
     let rb = req.body;
     //console.log(rb.paymentOption);
-    // console.log(req.session.shoppingCart)
+    //console.log(req.session.shoppingCart)
 
-    sql.createOrder(req.session.cID,rb.paymentOption,req.session.shoppingCart).then(function(recordOrder) {
-        console.log('dsihids'+recordOrder)
+    sql.createOrder(req.session.cID, rb.paymentOption, req.session.shoppingCart).then(function (recordOrder) {
+        console.log(recordOrder);
         response.msg = "success";
+        req.session.shoppingCart = [];
+        let customer = {};
+        customer.cID = req.session.cID;
+        dbMagic(customer); //update neo4j
     }).catch(err => {
         response.err = err;
         console.log(err)
@@ -190,6 +194,16 @@ const server = app.listen(process.env.PORT || 3000, function (err) {
     }
     sql.connect().then(() => {
         console.log("Server started on port", server.address().port);
+
+        //populate neo4j
+        sql.getUsers().then(users => {
+            users.forEach(user => {
+                dbMagic(user);
+            });
+        }).catch(err => {
+            console.log(err);
+        })
+
     }).catch((err) => {
         console.log(err);
         server.close(() => {
@@ -197,3 +211,34 @@ const server = app.listen(process.env.PORT || 3000, function (err) {
         });
     });
 });
+
+
+async function dbMagic(customer) {
+    if (customer.email && customer.fName && customer.cID) {
+        await neo4j.insertCustomer(customer.cID, customer.email, customer.fName, customer.lName);
+    };
+    sql.getColorFrequency(customer.cID).then(frequencies => {
+        frequencies.forEach(colorCount => {
+            neo4j.relateColorToCustomer(colorCount.color, colorCount.frequency, customer.cID);
+        });
+    }).catch(err => {
+        console.log("error at getColorFrequency()");
+        console.log(err);
+    });
+    sql.getCategoryFrequency(customer.cID).then(frequencies => {
+        frequencies.forEach(cagtegoryCount => {
+            neo4j.relateCategoryToCustomer(cagtegoryCount.category, cagtegoryCount.frequency, customer.cID);
+        });
+    }).catch(err => {
+        console.log("error at getCategoryFrequency()");
+        console.log(err);
+    });
+    sql.getMaterialFrequency(customer.cID).then(frequencies => {
+        frequencies.forEach(materialCount => {
+            neo4j.relateMaterialToCustomer(materialCount.material, materialCount.frequency, customer.cID);
+        });
+    }).catch(err => {
+        console.log("error at getMaterialFrequency()");
+        console.log(err);
+    });
+}

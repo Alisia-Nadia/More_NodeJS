@@ -1,0 +1,32 @@
+# find all customers who buy certain colors frequently ( 3 or more times)
+MATCH (a:Customer)-[r]-(b:Color) WHERE r.frequency > 2 RETURN a,b,r
+
+# find customers who share at least one color, at least one material and at least one category
+MATCH (a:Customer)-[raa]-(c:Color)-[rab]-(b:Customer)-[rbb]-(m:Material)-[rba]-(a)-[rca]-(d:Category)-[rcb]-(b) RETURN a,b,raa,rab,c,m, rbb, rba, d, rca, rcb
+
+# find most purchased XYZ
+MATCH (a:Customer)-[r]-(c:Color) WITH c, sum(r.frequency) AS p ORDER BY p DESC LIMIT 1 RETURN c.color, p
+	#green, 45
+MATCH (a:Customer)-[r]-(c:Category) WITH c, sum(r.frequency) AS p ORDER BY p DESC LIMIT 1 RETURN c.category, p
+	#clothes, 93
+MATCH (a:Customer)-[r]-(c:Material) WITH c, sum(r.frequency) AS p ORDER BY p DESC LIMIT 1 RETURN c.material, p
+	#silk, 63
+# for age between 18 and 24 (not implemented)
+WHERE a.age >=18 AND a.age <=24
+
+# see them by the count
+MATCH (a:Customer)-[r]-(c:Color) WITH c, sum(r.frequency) AS p RETURN c.color, p ORDER BY p DESC
+
+# get most purchased color in an array
+MATCH (a:Customer)-[r]-(c:Color) WITH c, sum(r.frequency) AS p ORDER BY p DESC LIMIT 1 RETURN collect(c.color)
+
+# find most popular XYZ (one that was purchased by the most people, regardless how many times)
+MATCH (a:Customer)-[r]-(c:Color) WITH c, count(r) AS p ORDER BY p DESC LIMIT 1 RETURN c.color, p
+	#green, 9
+MATCH (a:Customer)-[r]-(c:Category) WITH c, count(r) AS p ORDER BY p DESC LIMIT 1 RETURN c.category, p
+	#clothes, 11
+MATCH (a:Customer)-[r]-(c:Material) WITH c, count(r) AS p ORDER BY p DESC LIMIT 1 RETURN c.material, p
+	#silk, 11
+
+# PAGERANK
+*work in progress*
