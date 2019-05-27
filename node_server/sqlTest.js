@@ -14,7 +14,7 @@ const sql = require("./sql.js");
     sql.registerUser("Deodat", "Lawson", "deodat.lawson@mail.com", 44663322, "Amagerbrogade 48", "Copenhagen", "2300", "Denmark", "deodat");
 });*/
 
-sql.connect().then(()=>{
+/*sql.connect().then(()=>{
     let shoppingCart = [];
     shoppingCart.push({"pNo": 40, "pSize": "S"});
     shoppingCart.push({"pNo": 40, "pSize": "S"});
@@ -26,5 +26,17 @@ sql.connect().then(()=>{
         console.log(recordset);
     }).catch((err)=>{
         console.log(err);
+    });
+});*/
+
+sql.connect().then(() => {
+    sql.getColorFrequency(22).then(recordset=>{
+        console.log(recordset);
+    });
+    sql.getCategoryFrequency(22).then(recordset=>{
+        console.log(recordset);
+    });
+    sql.getMaterialFrequency(22).then(recordset=>{
+        console.log(recordset);
     });
 });

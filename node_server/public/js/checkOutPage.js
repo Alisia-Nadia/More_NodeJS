@@ -31,9 +31,10 @@ $(document).ready(function () {
             data: order
         }).done(function (res) {
             if(res.err){
-                alert('Chose a payment method!');
+                alert(res.err);
             }else{
                 alert("Order placed!");
+                window.location.assign("shoppingCartPage");
             }
          
         });

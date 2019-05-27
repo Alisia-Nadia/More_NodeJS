@@ -49,6 +49,16 @@ exports.registerUser = function (firstName, lastName, email, telephone, street, 
     });
 };
 
+exports.getUsers = function(){
+    return new Promise(function(resolve, reject){
+        let request = new sql.Request();
+        request.query(`SELECT * FROM Customers;`, function (err, recordset) {
+            if (err) return reject(err);
+            return resolve(recordset.recordset);
+        });
+    });
+}
+
 exports.loginUser = function (email, password) { // works
     return new Promise(function (resolve, reject) {
         let request = new sql.Request();
@@ -85,8 +95,40 @@ exports.getProductsForShoppingCart = function (shoppingCart) { // needs testing
                 generatedQuery += `\nUNION ALL\n`;
             }
         }
-        console.log("after loop: " + generatedQuery);
         request.query(generatedQuery, function (err, recordset) {
+            if (err) return reject(err);
+            return resolve(recordset.recordset);
+        });
+    });
+}
+
+exports.getColorFrequency = function (cid) {
+    return new Promise(function (resolve, reject) {
+        let request = new sql.Request();
+        request.input('cID', sql.Int, cid);
+        request.query(`SELECT * FROM getColorFrequency(@cID);`, function (err, recordset) {
+            if (err) return reject(err);
+            return resolve(recordset.recordset);
+        });
+    });
+}
+
+exports.getMaterialFrequency = function (cid) {
+    return new Promise(function (resolve, reject) {
+        let request = new sql.Request();
+        request.input('cID', sql.Int, cid);
+        request.query(`SELECT * FROM getMaterialFrequency(@cID);`, function (err, recordset) {
+            if (err) return reject(err);
+            return resolve(recordset.recordset);
+        });
+    });
+}
+
+exports.getCategoryFrequency = function (cid) {
+    return new Promise(function (resolve, reject) {
+        let request = new sql.Request();
+        request.input('cID', sql.Int, cid);
+        request.query(`SELECT * FROM getCategoryFrequency(@cID);`, function (err, recordset) {
             if (err) return reject(err);
             return resolve(recordset.recordset);
         });
