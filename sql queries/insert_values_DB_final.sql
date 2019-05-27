@@ -1,4 +1,23 @@
 
+
+
+insert into Department values('Sales');
+insert into Department values('Management');
+
+
+
+
+---------------populate Employee with employee info--------------------------------
+
+insert into Employee values('e1', 'Johan', 'Petersen', '+4555505435', 'j_pe@yahoo.com', 'Salesman', 1);
+insert into Employee values('e2', 'Tine', 'Andersen', '+4552689999', 'tine_andersen@gmail.com', 'Salesman', 1);
+insert into Employee values('e3', 'Erik', 'Bit', '+4541574121', 'erik99@mail.com', 'Manager', 2);
+insert into Employee values('e4', 'Johan', 'Bergsø', '+4545557845', 'bergsø@gmail.com', 'CEO', 2);
+insert into Employee values('e5', 'Johan', 'Petersen', '+4542165470', 'johanp@gmail.com', 'Salesman', 1);
+insert into Employee values('e6', 'Melissa', 'Pat', '+4544065570', 'melissa_p@gmail.com', 'Salesman', 1);
+
+
+
 ---------------populate Products with shoes products--------------------------------
 select*from Products
 

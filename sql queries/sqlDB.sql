@@ -1,4 +1,8 @@
+IF NOT EXISTS(SELECT * FROM sys.databases WHERE NAME='sqldb')
+CREATE DATABASE sqldb;
+
 use sqldb;
+
 
 create table Customers(
 
@@ -49,6 +53,27 @@ create table Order_products(
 		pID  int not null FOREIGN KEY REFERENCES Products(pNo),
 		priceAtPurchase int not null,
 );
+
+--DROP TABLE Department
+create table Department(
+		deptID int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+		dept_name varchar(30) NOT NULL,
+		 
+);
+
+
+--DROP TABLE Employee
+create table Employee(
+		eID char(5) not null PRIMARY KEY, 
+		efName varchar(30) NOT NULL,
+		elName varchar(30) NOT NULL,
+		telephone char(20) NOT NULL,
+		email varchar(50) NOT NULL,
+		title varchar(50) NOT NULL,
+		deptID int NOT NULL FOREIGN KEY REFERENCES department(deptID),
+
+);
+
 
 ALTER TABLE Orders
 ADD CONSTRAINT paymentOptionC CHECK (paymentOption IN ('Bank', 'Card', 'MobilePay'));
