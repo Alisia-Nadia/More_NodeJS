@@ -1,6 +1,6 @@
 
 ------------------UDF returns table shows each brand sold quantity---------------------------
-CREATE FUNCTION fn_getTheMostSaledBrand()
+CREATE FUNCTION fn_getBrandSales()
 RETURNS TABLE
 AS
 RETURN(
@@ -11,8 +11,23 @@ RETURN(
 	);
 GO
 
-SELECT*FROM fn_getTheMostSaledBrand() ORDER BY soldQuantity DESC
 
+------------------UDF returns most popular brand---------------------------
+CREATE FUNCTION fn_getTheMostSaledBrand()
+RETURNS TABLE
+AS
+RETURN(
+	SELECT TOP 1 * FROM 
+	(
+		SELECT*FROM fn_getBrandSales() 
+	) brandSales
+	ORDER BY brandSales.soldQuantity DESC
+	);
+GO
+
+SELECT*FROM fn_getBrandSales() ORDER BY soldQuantity DESC
+
+SELECT*FROM fn_getTheMostSaledBrand()
 
 ------------------UDF returns table shows monthly and yearly total sales revenue---------------------------
 CREATE FUNCTION fn_getMonthlyRevenue(@saleYear INT) 

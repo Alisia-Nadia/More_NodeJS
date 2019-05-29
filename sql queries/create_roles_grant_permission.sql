@@ -16,6 +16,8 @@ CREATE USER Johan FOR LOGIN Johan;
 
 ALTER ROLE salesman ADD MEMBER Johan;
 
+
+
 -----------------create role 'manager' and grant permission-----------------------
 CREATE ROLE manager;
 GRANT SELECT, UPDATE, INSERT, DELETE ON Order_products TO manager;
