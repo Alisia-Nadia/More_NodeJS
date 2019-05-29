@@ -26,14 +26,15 @@ SELECT
 	Orders.oID, Orders.date, Orders.paymentOption, 
 	Customers.fName, Customers.lName, Customers.email, Customers.telephone, 
 	CONCAT(Customers.street, Customers.city, Customers.postCode, Customers.country) AS cAddress, 
-	Products.pNo, Products.pName, Products.brand, Order_products.pSize, Order_products.priceAtPurchase
+	Products.pNo, Products.pName, Products.brand, Order_products.pSize, Order_products.priceAtPurchase,
+	Orders.status
 FROM
 dbo.Orders 
 INNER JOIN dbo.Customers ON Orders.cID = Customers.cID 
 INNER JOIN dbo.Order_products ON Orders.oID = Order_products.oID 
 INNER JOIN dbo.Products ON Order_products.pNo = Products.pNo
 
-
+DROP VIEW vw_order_details;
 
 
 
