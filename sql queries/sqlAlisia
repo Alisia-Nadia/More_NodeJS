@@ -1,0 +1,384 @@
+use FinalProject;
+
+create table Customers(
+
+		cID int not null IDENTITY(1,1) PRIMARY KEY,
+		fName varchar(255) not null,
+		lName varchar(255) not null,
+		email varchar(255) UNIQUE not null,
+		telephone int not null,
+		street varchar(255) not null,
+		city varchar(255) not null,
+		postCode varchar(255) not null,
+		country varchar(255) not null,
+		pHash varchar(255) not null,
+		
+		);
+
+create table Products(
+
+		pNo int not null IDENTITY(1,1) PRIMARY KEY,
+		pName varchar(255) not null,
+		generalDescription varchar(255) not null,
+		color varchar(255) not null,
+		brand varchar(255) not null,
+		
+		);
+
+ALTER TABLE Products
+ADD category varchar(255) not null;
+
+ALTER TABLE Products
+ADD subCategory varchar(255) not null;
+
+ALTER TABLE Products
+ADD gender varchar(255) not null;
+
+create table Product_details(
+
+		pNo int not null  FOREIGN KEY REFERENCES Products(pNo),
+		pSize varchar(255) not null,
+		price int not null,
+		quantity int not null,
+		PRIMARY KEY(pNO,pSize),
+		
+		);
+
+create table Orders(
+		
+		cID int not null FOREIGN KEY REFERENCES Customers(cID),
+		oID int not null IDENTITY(1,1) PRIMARY KEY,
+		date date,
+		paymentOption varchar(255) not null,
+		status varchar(255) not null,
+		
+		);
+
+
+
+create table Order_products(
+		
+		oID int not null FOREIGN KEY REFERENCES Orders(oID),
+		pNo  int not null,
+		pSize varchar(255) ,
+		priceAtPurchase int not null,
+		
+		FOREIGN KEY (pNo,pSize) references Product_details(pNo,pSize)
+);
+
+ALTER TABLE Orders
+ADD CONSTRAINT paymentOptionC CHECK (paymentOption IN ('Bank', 'Card', 'MobilePay'));
+
+ALTER TABLE Products
+ADD CONSTRAINT genderC CHECK (gender IN ('F', 'M'));
+
+ALTER TABLE Products
+ADD CONSTRAINT categoryC CHECK (category IN ('Clothes', 'Shoes'));
+
+
+
+ALTER TABLE Orders
+ADD CONSTRAINT statusC CHECK (status IN ('Canceled', 'Delivered', 'Returned','BeingProcessed'));
+
+
+SELECT *from Customers;
+
+SELECT *From Products;
+
+
+
+
+INSERT INTO Products VALUES('A-line dress','Silk','Green','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress',' Silk','Red','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress','Silk','Yellow','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress','Silk','Black','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress','Silk','White','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress','Silk','Pink','Nike','Clothes','F','Dress');
+INSERT INTO Products VALUES('A-line dress','Silk','Purple','Nike','Clothes','F','Dress');
+
+
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Green','Adidas','Clothes','F','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Green','Adidas','Clothes','M','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Red','Adidas','Clothes','F','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Red','Adidas','Clothes','M','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Yellow','Adidas','Clothes','F','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','Yellow','Adidas','Clothes','M','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','White','Adidas','Clothes','F','T-shirt');
+INSERT INTO Products VALUES('V-neck t-shirt','Cotton','White','Adidas','Clothes','M','T-shirt');
+
+INSERT INTO Products VALUES('Leather jacket','Leather','Black','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Leather jacket','Leather','Black','Prada','Clothes','M','Jacket');
+INSERT INTO Products VALUES('Leather jacket','Leather','Brown','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Leather jacket','Leather','Brown','Prada','Clothes','M','Jacket');
+
+INSERT INTO Products VALUES('Denim jacket','Denim','Yellow','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','Yellow','Prada','Clothes','M','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','White','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','White','Prada','Clothes','M','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','Black','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','Black','Prada','Clothes','M','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','Blue','Prada','Clothes','F','Jacket');
+INSERT INTO Products VALUES('Denim jacket','Denim','Blue','Prada','Clothes','M','Jacket');
+
+INSERT INTO Products VALUES('Denim pants','Denim','Gray','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Gray','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','White','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','White','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Black','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Black','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Blue','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Blue','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Red','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Red','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Pink','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Pink','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Green','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Green','Prada','Clothes','M','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Brown','Prada','Clothes','F','Pants');
+INSERT INTO Products VALUES('Denim pants','Denim','Brown','Prada','Clothes','M','Pants');
+
+INSERT INTO Products VALUES('Plaid skirt','Cotton','MultiColor','Armani','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Plaid skirt','Cotton','MultiColor','Prada','Clothes','F','Skirt');
+
+INSERT INTO Products VALUES('Mini skirt','Cotton','Yellow','Armani','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','Black','Armani','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','White','Armani','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','Pink','Armani','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','Purple','Armani','Clothes','F','Skirt');
+
+INSERT INTO Products VALUES('Mini skirt','Silk','Yellow','Prada','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Silk','Black','Prada','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Silk','White','Prada','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','Pink','Prada','Clothes','F','Skirt');
+INSERT INTO Products VALUES('Mini skirt','Cotton','Purple','Prada','Clothes','F','Skirt');
+
+select *from Products;
+select *from Product_details;
+
+
+INSERT INTO Product_details VALUES(31,'M',150,10);
+INSERT INTO Product_details VALUES(31,'S',150,15);
+INSERT INTO Product_details VALUES(31,'L',150,10);
+INSERT INTO Product_details VALUES(31,'Xl',150,5);
+
+INSERT INTO Product_details VALUES(32,'M',150,10);
+INSERT INTO Product_details VALUES(32,'S',150,15);
+INSERT INTO Product_details VALUES(32,'L',150,10);
+INSERT INTO Product_details VALUES(32,'Xl',150,5);
+
+INSERT INTO Product_details VALUES(33,'M',150,10);
+INSERT INTO Product_details VALUES(33,'S',150,15);
+INSERT INTO Product_details VALUES(33,'L',150,10);
+INSERT INTO Product_details VALUES(33,'Xl',150,5);
+
+INSERT INTO Product_details VALUES(34,'M',150,10);
+INSERT INTO Product_details VALUES(34,'S',150,15);
+INSERT INTO Product_details VALUES(34,'L',150,10);
+INSERT INTO Product_details VALUES(34,'Xl',150,5);
+
+INSERT INTO Product_details VALUES(35,'M',150,10);
+INSERT INTO Product_details VALUES(35,'S',150,15);
+INSERT INTO Product_details VALUES(35,'L',150,10);
+INSERT INTO Product_details VALUES(35,'Xl',150,5);
+
+INSERT INTO Product_details VALUES(36,'M',150,10);
+INSERT INTO Product_details VALUES(36,'S',150,15);
+INSERT INTO Product_details VALUES(36,'L',150,10);
+INSERT INTO Product_details VALUES(36,'Xl',150,5);
+
+
+INSERT INTO Product_details VALUES(37,'M',150,10);
+INSERT INTO Product_details VALUES(37,'S',150,15);
+INSERT INTO Product_details VALUES(37,'L',150,10);
+INSERT INTO Product_details VALUES(37,'Xl',150,5);
+
+
+
+INSERT INTO Product_details VALUES(38,'M',100,10);
+INSERT INTO Product_details VALUES(38,'S',100,15);
+INSERT INTO Product_details VALUES(38,'L',100,10);
+INSERT INTO Product_details VALUES(38,'Xl',100,5);
+
+INSERT INTO Product_details VALUES(39,'M',100,25);
+INSERT INTO Product_details VALUES(39,'S',100,15);
+INSERT INTO Product_details VALUES(39,'L',100,10);
+INSERT INTO Product_details VALUES(39,'Xl',100,5);
+
+INSERT INTO Product_details VALUES(40,'M',100,20);
+INSERT INTO Product_details VALUES(40,'S',100,15);
+INSERT INTO Product_details VALUES(40,'L',100,10);
+INSERT INTO Product_details VALUES(40,'Xl',100,5);
+
+INSERT INTO Product_details VALUES(41,'M',100,17);
+INSERT INTO Product_details VALUES(41,'S',100,15);
+INSERT INTO Product_details VALUES(41,'L',100,10);
+INSERT INTO Product_details VALUES(41,'Xl',100,5);
+
+INSERT INTO Product_details VALUES(42,'M',100,10);
+INSERT INTO Product_details VALUES(42,'S',100,15);
+INSERT INTO Product_details VALUES(42,'L',100,10);
+INSERT INTO Product_details VALUES(42,'Xl',100,5);
+
+INSERT INTO Product_details VALUES(43,'M',100,10);
+INSERT INTO Product_details VALUES(43,'S',100,25);
+INSERT INTO Product_details VALUES(43,'L',100,10);
+INSERT INTO Product_details VALUES(43,'Xl',100,10);
+
+INSERT INTO Product_details VALUES(44,'M',100,10);
+INSERT INTO Product_details VALUES(44,'S',100,15);
+INSERT INTO Product_details VALUES(44,'L',100,20);
+INSERT INTO Product_details VALUES(44,'Xl',100,15);
+
+INSERT INTO Product_details VALUES(45,'M',100,10);
+INSERT INTO Product_details VALUES(45,'S',10,15);
+INSERT INTO Product_details VALUES(45,'L',100,10);
+INSERT INTO Product_details VALUES(45,'Xl',100,5);
+
+
+INSERT INTO Product_details VALUES(82,'M',50,3);
+INSERT INTO Product_details VALUES(83,'S',50,5);
+INSERT INTO Product_details VALUES(84,'M',50,6);
+INSERT INTO Product_details VALUES(85,'S',50,2);
+INSERT INTO Product_details VALUES(86,'M',50,4);
+INSERT INTO Product_details VALUES(87,'S',50,5);
+INSERT INTO Product_details VALUES(88,'M',50,10);
+INSERT INTO Product_details VALUES(89,'S',50,5);
+INSERT INTO Product_details VALUES(90,'M',50,7);
+INSERT INTO Product_details VALUES(91,'S',50,5);
+
+INSERT INTO Product_details VALUES(82,'S',50,5);
+INSERT INTO Product_details VALUES(83,'M',50,5);
+INSERT INTO Product_details VALUES(84,'S',50,7);
+INSERT INTO Product_details VALUES(85,'M',50,4);
+INSERT INTO Product_details VALUES(86,'S',50,3);
+INSERT INTO Product_details VALUES(87,'M',50,10);
+INSERT INTO Product_details VALUES(88,'S',50,7);
+INSERT INTO Product_details VALUES(89,'M',50,3);
+INSERT INTO Product_details VALUES(90,'S',50,4);
+INSERT INTO Product_details VALUES(91,'M',50,5);
+
+select *from Customers;
+
+INSERT INTO ORDERS VALUES(20,'10-12-1992','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(22,'10-29-2012','Card','Delivered');
+INSERT INTO ORDERS VALUES(23,'12-11-2011','Bank','Canceled');
+INSERT INTO ORDERS VALUES(21,'10-10-2015','Card','Delivered');
+INSERT INTO ORDERS VALUES(24,'11-11-2014','Card','Canceled');
+INSERT INTO ORDERS VALUES(25,'11-08-2012','Bank','Delivered');
+INSERT INTO ORDERS VALUES(26,'10-09-2003','Bank','Canceled');
+INSERT INTO ORDERS VALUES(27,'02-02-1982','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(28,'10-12-2002','MobilePay','Delivered');
+
+INSERT INTO ORDERS VALUES(29,'10-12-2012','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(20,'05-09-2019','Card','Delivered');
+INSERT INTO ORDERS VALUES(21,'10-11-2017','Bank','Canceled');
+INSERT INTO ORDERS VALUES(22,'10-10-2018','Card','Delivered');
+INSERT INTO ORDERS VALUES(23,'06-02-2019','Card','Canceled');
+INSERT INTO ORDERS VALUES(24,'01-03-2018','Bank','Delivered');
+INSERT INTO ORDERS VALUES(25,'10-04-2019','Bank','Canceled');
+INSERT INTO ORDERS VALUES(26,'02-02-2019','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(27,'02-02-2019','MobilePay','Delivered');
+
+INSERT INTO ORDERS VALUES(28,'10-12-2019','MobilePay','BeingProcessed');
+INSERT INTO ORDERS VALUES(29,'03-09-2019','Card','BeingProcessed');
+INSERT INTO ORDERS VALUES(22,'01-11-2019','Bank','BeingProcessed');
+INSERT INTO ORDERS VALUES(23,'10-10-2019','Card','BeingProcessed');
+INSERT INTO ORDERS VALUES(21,'07-02-2019','Card','Canceled');
+INSERT INTO ORDERS VALUES(23,'03-03-2018','Bank','Delivered');
+INSERT INTO ORDERS VALUES(22,'10-04-2019','Bank','Canceled');
+INSERT INTO ORDERS VALUES(23,'02-02-2019','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(21,'04-02-2019','MobilePay','Delivered');
+
+select *from Orders;
+
+INSERT INTO ORDERS VALUES(26,'10-12-2016','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(27,'03-09-2016','Card','Delivered');
+INSERT INTO ORDERS VALUES(25,'12-11-2012','Bank','Canceled');
+INSERT INTO ORDERS VALUES(24,'10-10-2017','Card','Delivered');
+INSERT INTO ORDERS VALUES(25,'11-02-2019','Card','Canceled');
+INSERT INTO ORDERS VALUES(25,'10-03-2012','Bank','Delivered');
+INSERT INTO ORDERS VALUES(28,'10-04-2015','Bank','Canceled');
+INSERT INTO ORDERS VALUES(29,'02-02-2014','MobilePay','Delivered');
+INSERT INTO ORDERS VALUES(21,'02-02-2012','MobilePay','Delivered');
+
+
+SELECT *From Product_details;
+
+
+
+INSERT INTO Order_products VALUES(3,31,'M',75);
+
+Select *from Order_products;
+
+INSERT INTO Order_products VALUES(3,32,'M',75);
+INSERT INTO Order_products VALUES(3,40,'S',95);
+INSERT INTO Order_products VALUES(3,41,'L',105);
+INSERT INTO Order_products VALUES(3,45,'S',80);
+
+INSERT INTO Order_products VALUES(5,31,'XL',50);
+INSERT INTO Order_products VALUES(14,31,'S',75);
+
+INSERT INTO Order_products VALUES(7,31,'M',75);
+INSERT INTO Order_products VALUES(8,31,'S',75);
+INSERT INTO Order_products VALUES(8,41,'L',85);
+
+INSERT INTO Order_products VALUES(8,48,'L',95);
+INSERT INTO Order_products VALUES(9,31,'M',65);
+INSERT INTO Order_products VALUES(9,88,'S',85);
+INSERT INTO Order_products VALUES(10,35,'S',75);
+INSERT INTO Order_products VALUES(10,45,'S',95);
+
+INSERT INTO Order_products VALUES(12,34,'S',75);
+INSERT INTO Order_products VALUES(12,66,'M',105);
+
+select *from Order_products;
+
+INSERT INTO Order_products VALUES(16,32,'S',75);
+INSERT INTO Order_products VALUES(16,38,'S',95);
+
+INSERT INTO Order_products VALUES(17,39,'S',80);
+
+INSERT INTO Order_products VALUES(18,51,'S',50);
+INSERT INTO Order_products VALUES(18,56,'M',75);
+INSERT INTO Order_products VALUES(19,53,'S',105);
+
+INSERT INTO Order_products VALUES(20,61,'L',75);
+INSERT INTO Order_products VALUES(21,65,'S',75);
+INSERT INTO Order_products VALUES(21,32,'L',85);
+INSERT INTO Order_products VALUES(22,66,'S',95);
+INSERT INTO Order_products VALUES(22,72,'M',65);
+INSERT INTO Order_products VALUES(23,82,'S',85);
+INSERT INTO Order_products VALUES(23,35,'XL',75);
+INSERT INTO Order_products VALUES(23,45,'S',95);
+
+INSERT INTO Order_products VALUES(25,34,'S',75);
+INSERT INTO Order_products VALUES(25,66,'S',105);
+
+INSERT INTO Order_products VALUES(26,81,'M',75);
+INSERT INTO Order_products VALUES(26,82,'M',95);
+INSERT INTO Order_products VALUES(27,41,'L',105);
+
+INSERT INTO Order_products VALUES(31,31,'S',75);
+INSERT INTO Order_products VALUES(32,31,'S',75);
+INSERT INTO Order_products VALUES(32,41,'L',85);
+INSERT INTO Order_products VALUES(32,48,'S',95);
+INSERT INTO Order_products VALUES(34,34,'M',65);
+INSERT INTO Order_products VALUES(34,88,'S',85)
+INSERT INTO Order_products VALUES(36,34,'M',75);
+INSERT INTO Order_products VALUES(37,66,'S',105);
+
+
+INSERT INTO Order_products VALUES(37,42,'S',95);
+INSERT INTO Order_products VALUES(38,41,'M',105);
+INSERT INTO Order_products VALUES(38,66,'L',80);
+INSERT INTO Order_products VALUES(39,76,'M',80);
+INSERT INTO Order_products VALUES(39,34,'S',75);
+INSERT INTO Order_products VALUES(40,31,'S',75);
+INSERT INTO Order_products VALUES(40,31,'L',75);
+INSERT INTO Order_products VALUES(41,41,'L',85);
+INSERT INTO Order_products VALUES(42,31,'S',65);
+INSERT INTO Order_products VALUES(42,88,'S',85);
+INSERT INTO Order_products VALUES(42,35,'M',75);
+INSERT INTO Order_products VALUES(42,45,'S',95);
+INSERT INTO Order_products VALUES(42,34,'M',75);
+INSERT INTO Order_products VALUES(41,66,'L',105);
