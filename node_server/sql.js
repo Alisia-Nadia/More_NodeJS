@@ -161,7 +161,6 @@ exports.createOrder = function (cid, paymentOption, shoppingCart) { // works
             COMMIT
             END TRY
             BEGIN CATCH
-                PRINT 'catch'
                 ROLLBACK
             END CATCH`, function (err, recordset) {
                     if (err) return reject(err);
