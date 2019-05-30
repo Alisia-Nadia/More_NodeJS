@@ -40,7 +40,7 @@ $(document).ready(function () {
                     'Size: ' + e.pSize + '</br>' +
                     'Price: ' + e.price + '</br>' +
                     'Brand: ' + e.brand + '</br>' +
-                    '<img src = "../pictures/husky1.jpg">' + '</br>' +
+                    '<img width ="100px" heigh ="100px" src = "../pictures/'+e.pNo +'.jpg" >' + '</br>' +
                     '<button class="removeFromCartButtons" pnumber =' + e.pNo + ' psize = ' + e.pSize + '>Remove from cart</button>' +
                     '</div>')
             });

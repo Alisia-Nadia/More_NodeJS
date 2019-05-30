@@ -5,12 +5,12 @@ $.ajax({
     res.products.forEach(e => {
         $('#mainFlex').append('<div style="margin: 10px; border: 0px solid black"><b>'
             + e.pName + '</b></br>'
-            + e.generalDescription + '</br>'
+            + e.Material + '</br>'
             + 'Color: ' + e.color + '</br>'
             + 'Size: ' + e.pSize + '</br>'
             + 'Price: ' + e.price + '</br>'
             + 'Brand: ' + e.brand + '</br>'
-            + '<img src = "../pictures/husky1.jpg">' + '</br>'
+            + '<img width ="100px" heigh ="100px" src = "../pictures/'+e.pNo +'.jpg" >' + '</br>'
             + '<button class="addToCartButtons" pnumber =' + e.pNo + ' psize = ' + e.pSize + '>Add to cart</button>'
             + '</div>')
     });
