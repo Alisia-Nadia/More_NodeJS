@@ -1,6 +1,6 @@
 //neo4j driver
 const neo4j = require('neo4j-driver').v1;
-const driver = neo4j.driver("bolt://hickle-flat-blue-billie.graphstory.me:7687", neo4j.auth.basic("hickle_flat_blue_billie", "fSfrV3alBtF4jbpcYNZQlh5qjwJ"));
+const driver = neo4j.driver("bolt://plum-buckridge-falls-bud.graphstory.me:7687", neo4j.auth.basic("plum_buckridge_falls_bud", "PaFjp83c3y2tKlZB6hBK"));
 const session = driver.session();
 //json to csv parser
 const { Parser } = require('json2csv');

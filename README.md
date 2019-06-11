@@ -4,15 +4,15 @@
 
 GUI
 
-https://hickle-flat-blue-billie.graphstory.me
+https://plum-buckridge-falls-bud.graphstory.me
 
 API
 
-bolt://hickle-flat-blue-billie.graphstory.me:7687
+bolt://plum-buckridge-falls-bud.graphstory.me:7687
 
-username: hickle_flat_blue_billie
+username: plum_buckridge_falls_bud
 
-password: fSfrV3alBtF4jbpcYNZQlh5qjwJ
+password: PaFjp83c3y2tKlZB6hBK
 
 # SQL server credentials (azure)
 
