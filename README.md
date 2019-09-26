@@ -1,25 +1,5 @@
 # db_final_project
 
-# neo4j credentials (graphstory)
+This is an e-shop website running on a Node.js server. Users can view items, add them to cart, remove them or make a purchase. Data are saved in cloud-hosted databases, Microsoft SQL (Azure) and Neo4j (graphstory).
 
-GUI
-
-https://plum-buckridge-falls-bud.graphstory.me
-
-API
-
-bolt://plum-buckridge-falls-bud.graphstory.me:7687
-
-username: plum_buckridge_falls_bud
-
-password: PaFjp83c3y2tKlZB6hBK
-
-# SQL server credentials (azure)
-
-API
-
-bilbo-server.database.windows.net
-
-username: hickle_flat_blue_billie
-
-password: fSfrV3alBtF4jbpcYNZQlh5qjwJ
+The emphasis is on the back-end part, the front-end is minimal and mostly for easier testing purposes.
